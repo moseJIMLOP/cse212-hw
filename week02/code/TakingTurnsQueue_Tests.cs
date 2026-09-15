@@ -11,7 +11,9 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: The error in this code is that, Bob, Tim and Sue are added to the queue correctly, but GetNextPerson does not re-enqueue them back into the queue. It is suposse that if Bob
+    // has 2 turns he should be added 1 more time to the queue, Tim with 5 turns should be added 4 more times and Sue with 3 turns should be added 2 more times. 
+    // So we need to change TakingTurnsQueue.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -43,7 +45,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found: GetNextPerson does not add the person back to the queue when they still have turns.
+    // Because of this, Bob, Tim, and Sue are only returned one time.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -54,7 +57,7 @@ public class TakingTurnsQueueTests
         Person[] expectedResult = [bob, tim, sue, bob, tim, sue, tim, george, sue, tim, george, tim, george];
 
         var players = new TakingTurnsQueue();
-        players.AddPerson(bob.Name, bob.Turns);
+        players.AddPerson(bob.Name, bob.Turns); 
         players.AddPerson(tim.Name, tim.Turns);
         players.AddPerson(sue.Name, sue.Turns);
 
@@ -85,7 +88,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: // Defect(s) Found: People with 0 turns are not added back to the queue.
+    // 0 turns means that the person has infinite turns, so Tim should always be added back to the queue.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -116,7 +120,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: People with negative turns are not added back to the queue.
+    // A negative number means infinite turns, so Tim should always be added back to the queue.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
