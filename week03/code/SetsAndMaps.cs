@@ -22,7 +22,27 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        
+            HashSet<string> seenWords = new HashSet<string>();
+            List<string> symmetricPairs = new List<string>();
+            
+            foreach (string word in words)
+            {
+                if (word[0] == word[1])
+                {
+                    continue;
+                }
+                string reversedWord = new string(new char[] { word[1], word[0] });
+                if (seenWords.Contains(reversedWord))
+                {
+                    symmetricPairs.Add($"{reversedWord} & {word}");
+                }
+                else
+                {
+                    seenWords.Add(word);
+                }
+            }   
+        return symmetricPairs.ToArray();
     }
 
     /// <summary>
@@ -43,6 +63,15 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3].Trim();
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
