@@ -96,7 +96,37 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        Dictionary<char, int> GetLetterCounts(string word)
+        {
+            var counts = new Dictionary<char, int>();
+            foreach (var letter in word.ToLower().Replace(" ", ""))
+            {
+                if (counts.ContainsKey(letter))
+                {
+                    counts[letter]++;
+                }
+                else
+                {
+                    counts[letter] = 1;
+                }
+            }
+            return counts;
+        }
+
+        var counts1 = GetLetterCounts(word1);
+        var counts2 = GetLetterCounts(word2);
+
+        if (counts1.Count != counts2.Count)
+            return false;   
+        
+        foreach (var pair in counts1)
+        {
+            if (!counts2.TryGetValue(pair.Key, out int count) || count != pair.Value)
+                return false;
+        
+        }
+        return true;
+
     }
 
     /// <summary>
